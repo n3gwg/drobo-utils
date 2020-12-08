@@ -1,3 +1,14 @@
+==============
+Stuart's Notes
+==============
+
+I am Stuart Blake Tener, a Computer Scientist and Amateur Radio Operator (N3GWG) that has
+begun to work on the Drobo-Utils package in order to modernize it and bring back into the
+best functional state that I can.
+
+From this point forward the versioning shall start with Version 1.0.0.0 as of 07 DEC 2020
+and going forward from there in my repo with my fork of the product.
+
 
 ---------------
 DEVELOPER NOTES
@@ -272,7 +283,7 @@ The right thing to do.
 Administrivia
 -------------
 
-Revision date: 2009/12/27
+Revision date: 2020/12/07 (07 DEC 2020)
 
 copyright:
 
@@ -280,16 +291,5 @@ Drobo Utils Copyright (C) 2008,2009  Peter Silva (Peter.A.Silva@gmail.com)
 Drobo Utils comes with ABSOLUTELY NO WARRANTY; For details type see the file
 named COPYING in the root of the source directory tree.
 
- version 9999, somewhen
-
-==============
-Stuart's Notes
-==============
-
-I am Stuart Blake Tener, a Computer Scientist and Amateur Radio Operator (N3GWG) that has
-begun to work on the Drobo-Utils package in order to modernize it and bring back into the
-best functional state that I can.
-
-From this point forward the versioning shall start with Version 1.0.0.0 as of 07 DEC 2020
-and going forward from there in my repo with my fork of the product.
+ version 1.0.0.0
 
