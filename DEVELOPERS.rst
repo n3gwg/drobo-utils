@@ -282,3 +282,14 @@ named COPYING in the root of the source directory tree.
 
  version 9999, somewhen
 
+==============
+Stuart's Notes
+==============
+
+I am Stuart Blake Tener, a Computer Scientist and Amateur Radio Operator (N3GWG) that has
+begun to work on the Drobo-Utils package in order to modernize it and bring back into the
+best functional state that I can.
+
+From this point forward the versioning shall start with Version 1.0.0.0 as of 07 DEC 2020
+and going forward from there in my repo with my fork of the product.
+
