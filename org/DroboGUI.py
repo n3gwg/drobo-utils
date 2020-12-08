@@ -21,7 +21,7 @@ from PyQt4 import QtCore
 import socket
 import Drobo
 import subprocess
-import subprocess
+import commands
 import string
 
 def _toGB(num):
@@ -56,7 +56,7 @@ partitioner=""
 def _runPartitioner():
    """ invoke existing partitioning program...
    """
-   print("partitioner = ", partitioner)
+   print "partitioner = ", partitioner
    subprocess.Popen( partitioner, shell=True)
 
 class DroboAbout(QtGui.QWidget):
@@ -223,7 +223,7 @@ class DroboGUI(QtGui.QMainWindow):
 
         if self.Format.inProgress and ( self.fmt_process.poll() != None) :
                # reset to normal state...
-               print('it took: %d updates to run' % (self.updates - self.Format.startupdate ))
+               print 'it took: %d updates to run' % (self.updates - self.Format.startupdate )
                self.Format.inProgress=0
                normal = self.Tools.Updatebutton.palette().color( QtGui.QPalette.Button )
                self.Format.Formatbutton.palette().setColor( QtGui.QPalette.Button, QtCore.Qt.blue )
@@ -287,7 +287,7 @@ class DroboGUI(QtGui.QMainWindow):
 
     def ReallyFormatLUN(self):
 
-       print('Really formatting...')
+       print 'Really formatting...'
        self.Format.disconnect(self.Format.Formatbutton, QtCore.SIGNAL('clicked()'),
                 self.ReallyFormatLUN)
        if self.Format.fstype == 'none': # changing LUN size
@@ -305,7 +305,7 @@ class DroboGUI(QtGui.QMainWindow):
 
 
     def FormatLUN(self):
-       print('Clicked format...')
+       print 'Clicked format...'
        if self.Format.ntfs.isChecked():
             fstype='ntfs'
        elif self.Format.msdos.isChecked():
@@ -413,7 +413,7 @@ class DroboGUI(QtGui.QMainWindow):
                 self.__adjustlunsize)
 
         self.Format.ext3 = QtGui.QRadioButton("Ext3 (journalled ext2)", self.Format)
-        mkfs = subprocess.getoutput("which mke2fs")
+        mkfs = commands.getoutput("which mke2fs")
         if mkfs == "" : 
             self.Format.ext3.setCheckable(0)
             self.Format.ext3.setStyleSheet( "QWidget { color: gray }" )
@@ -422,7 +422,7 @@ class DroboGUI(QtGui.QMainWindow):
         flay.addWidget(self.Format.ext3,3,0,1,-1)
 
         self.Format.msdos = QtGui.QRadioButton("FAT32 MS - Disk Operating System", self.Format)
-        mkfs = subprocess.getoutput("which mkdosfs")
+        mkfs = commands.getoutput("which mkdosfs")
         if ( mkfs == "" ): 
             self.Format.msdos.setCheckable(0)
             self.Format.msdos.setStyleSheet( "QWidget { color: gray }" )
@@ -433,7 +433,7 @@ class DroboGUI(QtGui.QMainWindow):
         self.Format.ntfs = QtGui.QRadioButton("NTFS -- Windows NT/XP/Vista", self.Format)
         flay.addWidget(self.Format.ntfs,5,0,1,-1)
 
-        mkfs = subprocess.getoutput("which mkntfs")
+        mkfs = commands.getoutput("which mkntfs")
         if ( mkfs == "" ): 
             self.Format.ntfs.setCheckable(0)
             self.Format.ntfs.setStyleSheet( "QWidget { color: gray }" )
@@ -464,7 +464,7 @@ class DroboGUI(QtGui.QMainWindow):
     def checkup(self):
         self.drobo.Sync() # convenient side effect:  make the host and drobo clocks agree...
         (fwarch, fwversion, hwlevel, fwpath ) = self.drobo.PickLatestFirmware()
-        print("checkup: this Drobo is a %s hw rev: %s, and needs: %s" % ( fwarch, hwlevel, fwversion ))
+        print "checkup: this Drobo is a %s hw rev: %s, and needs: %s" % ( fwarch, hwlevel, fwversion )
         if fwpath != '' :
             self.Tools.Updatebutton.setText( "Upgrade" )
             self.disconnect(self.Tools.Updatebutton, QtCore.SIGNAL('clicked()'), self.checkup)

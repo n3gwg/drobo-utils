@@ -77,7 +77,7 @@ def _ledstatus(n):
         STATUS: working with ERRATA:
         Developer Notes:
         The spec says: status is high order 3 bits, and starting from 0, goes:
-        green, yellow, Red, ( Green Yellow )
+		green, yellow, Red, ( Green Yellow )
 
         dmp.h says:
         forget the high order 3 bits, it's the whole byte.
@@ -86,10 +86,10 @@ def _ledstatus(n):
 
         my drobo says: 
                 high order bits always 0. status seems to use whole byte.
-        green is 3,  
-        flashing red-green is 4...  which dmp.h says is yellow green
+		green is 3,  
+		flashing red-green is 4...  which dmp.h says is yellow green
                 flashing red-black is 6...  agrees with dmp.h
-        0x80 is indeed an empty slot, as per dmp.h
+		0x80 is indeed an empty slot, as per dmp.h
                 unknown-- yellow-green...
         matches neither... hmm...        
     """
@@ -201,11 +201,11 @@ def _unitfeatures(norig):
     
         STATUS: working.
         this comes straight from dmp.h.. what they mean isn't documented.
-        stuff that looks wrong: 
-        -- USED_CAPACITY... should be USE_CAPACITY ... no 'D'
-        -- all the 'SUPPORTS' texts are redundant. every bit is about
+        stuff that looks wrong:	
+		-- USED_CAPACITY... should be USE_CAPACITY ... no 'D'
+		-- all the 'SUPPORTS' texts are redundant. every bit is about
                    what is supported.  It should be just LUNINFO2
-         etc...         
+         etc...			
          feature x0800 and 0x2000 show up on my Drobo v1 running 1.3.0...
          of course, do not know what they are...
     """
@@ -317,12 +317,12 @@ class Drobo:
         if ( len(cfg) != 3 ): # We ask this page to return three fields...
             if DEBUG & DBG_Detection:
               print("%s length of cfg is: %d, should be 3" % (self.char_dev_file, len(cfg)))
-        raise DroboException 
+	    raise DroboException 
 
         if ( self.slot_count < 4 ): 
             if DEBUG & DBG_Detection:
               print("%s cfg[0] = %s, should >= 4. All Drobos have at least 4 slots" % (self.char_dev_file, cfg[0]))
-        raise DroboException # Assert: All Drobo have 4 slots.
+	    raise DroboException # Assert: All Drobo have 4 slots.
  
         set=self.GetSubPageSettings()
         if DEBUG & DBG_Detection:
@@ -336,7 +336,7 @@ class Drobo:
             raise DroboException
 
         if ( self.fw[6].lower() != 'armmarvell' ):
-         print("interesting, %s fw[6] is: %s" % (self.char_dev_file,self.fw[6]))
+	     print("interesting, %s fw[6] is: %s" % (self.char_dev_file,self.fw[6]))
         #if ( self.fw[6].lower() != 'armmarvell' ):
         #    if DEBUG & DBG_Detection:
         #      print "%s fw[6] is not armmarvell." % self.char_dev_file
@@ -372,7 +372,7 @@ class Drobo:
      need to detect each lun...
 
      algorithm:
-    do discoverLUNs()
+	do discoverLUNs()
         figure out which LUNs belong to the current Drobo... How?
           -- do not want to partition LUNS on another Drobo!
              That would be bad!
@@ -516,7 +516,7 @@ class Drobo:
 
   def Sync(self,NewName=None):
     """  Set the Drobo's current time to the host's time,
-     and the name to selected value.
+	 and the name to selected value.
 
      STATUS: works, maybe...
         DRI claims Drobos are all in California time.  afaict, it ignores TZ completely.
@@ -530,7 +530,7 @@ class Drobo:
     payload="LH32s"
     payloadlen=struct.calcsize(payload)
     if NewName==None:
-        NewName=self.GetSubPageSettings()[2]
+    	NewName=self.GetSubPageSettings()[2]
 
     buffer=struct.pack( ">BBH" + payload , 0x7a, 0x05, payloadlen, now, 0 , NewName )
     sblen=len(buffer)
@@ -639,7 +639,7 @@ class Drobo:
     """ returns diagnostics as a string...
         diagcodes are either 4 or 7 for the two different Records available.
 
-    STATUS: works fine.
+	STATUS: works fine.
 
         decryption done in drobom (look at diagprint)
     """
@@ -666,7 +666,7 @@ class Drobo:
 
         cmdout = self.fd.get_sub_page( buflen, modepageblock, todev, DEBUG )
         i=i+1
-        diags=diags+cmdout
+	diags=diags+cmdout
 
         if DEBUG & DBG_General:
             print("diags ", i, ", cmdlen=", len(cmdout), " diagslen=", len(diags))
@@ -730,7 +730,7 @@ class Drobo:
            if (DEBUG & DBG_General):
               print(f , ' ? ')
               print('firmware for hw rev ', f[-5] , ' this drobo is rev ', hwlevel[0])
-       if f[-5] == hwlevel[0]:
+	   if f[-5] == hwlevel[0]:
               self.fwdata = z.read(f) 
     else: # old file...
        f = open(name,'r')
@@ -902,8 +902,8 @@ class Drobo:
     self.fwhdr = struct.unpack('>ll4sl16slllll256sl', self.fwdata[0:312])
 
     if  len(self.fwdata) != ( self.fwhdr[0] + self.fwhdr[8] ) :
-      print('header corrupt... Length does not validate.')
-    return 0
+	print('header corrupt... Length does not validate.')
+	return 0
 
     if (DEBUG & DBG_Chatty):
       print('header+body lengths validated.  Good.')
@@ -997,7 +997,7 @@ class Drobo:
     """
         given good firmware data, upload it to the Drobo...
 
-    1_README_*.txt from the resource kit is followed here.
+	1_README_*.txt from the resource kit is followed here.
 
         function -- a callback that accepts a single argument, an integer in the range 0-100.
            indicates % done.  the function is called after each write in the loop.
@@ -1030,8 +1030,8 @@ class Drobo:
     while (written == buflen) and ( i < len(self.fwdata)) :
 
         if ( i + buflen ) > totallength :  # writing the last record.
-            buflen= totallength - i
-            moretocome=0
+        	buflen= totallength - i
+                moretocome=0
 
         modepageblock=struct.pack( ">BBBBBBBHB", 
             0xea, 0x10, 0x00, 0x70, 0x00, self.transactionID, moretocome, 
@@ -1074,7 +1074,7 @@ class Drobo:
 
      if DEBUG & DBG_Simulation:
         self.slot_count = 8
-     return (8, 16, 2199023250944)
+	return (8, 16, 2199023250944)
 
      result=self.__getsubpage( 0x01, 'BBBQ'  )
      self.slot_count = result[0]
@@ -1086,7 +1086,7 @@ class Drobo:
      if DEBUG & DBG_Simulation:
         capacity = 495452160000
         used = random.randint(0,capacity)
-     return (capacity-used, used, capacity, 125184245760)
+	return (capacity-used, used, capacity, 125184245760)
 
      return self.__getsubpage(0x02, 'QQQQ' )
 
@@ -1129,7 +1129,7 @@ class Drobo:
      while (j < self.slot_count ):
        i=j*8
        s = ( r[i+2], r[i+3], r[i+4], _ledstatus( r[i+5] ), r[i+6].strip(" \0"),
-        r[i+7].strip(" \0") )
+		r[i+7].strip(" \0") )
        l.append( s ) 
        j=j+1
 
@@ -1140,7 +1140,7 @@ class Drobo:
      """
          For each LUN, returns detailed information tuple:
             [ ( LUNID, LUN total Capacity, LUN Used Capacity, PartitionScheme*, Format* ),
-        ... ]
+		... ]
 
          *only returned if firmware: SUPPORTS_NEW_LUNINFO2 (essentially >=1.1.0)
 
@@ -1151,7 +1151,7 @@ class Drobo:
 
       parameter luninfo2[k+4] is supposed to be partcount...
       but 'PartCount' is odd. Seems to always be 128 (0x80)
-    once partitions are set on my v1.  perhaps indicates maximum?
+ 	once partitions are set on my v1.  perhaps indicates maximum?
 
       if you mix partition types within a single Drobo, Drobo tends to give up
       and claim "no partitions" rather than reporting the union of the types.
@@ -1193,14 +1193,14 @@ class Drobo:
 
         STATUS: works with... 
         ERRATA:
-        -- dpd.h and other sources say offset is two bytes.
+		-- dpd.h and other sources say offset is two bytes.
                 -- DMP Spec says it is only one byte.
-        -- other sources say it is always set to 'California Time'... 8.
-        -- California time is UTC - 8... +8 would be China.
-        -- structures returned are supposed to be in network byte order (MSB)
+		-- other sources say it is always set to 'California Time'... 8.
+		-- California time is UTC - 8... +8 would be China.
+		-- structures returned are supposed to be in network byte order (MSB)
                    when two byte value read in network byte order, result is 2048.
                    they stuff it in LSB order, so the 8 ended up in the higher order byte.
-        -- so I just claim it says 8 and shut up.
+		-- so I just claim it says 8 and shut up.
 
      """
      if DEBUG & DBG_Simulation:
@@ -1232,22 +1232,22 @@ class Drobo:
         STATUS:  working with ERRATA:
 
         returns ( majorVer, MinorVer, Build, UpgMajorVer, UpgMinorVer, 
-        BuildDate, Arch, )
+		BuildDate, Arch, )
         above is what the spec says...
 
-    dpd.h says byte 128 has a feature
-        agrees on the first four, but says the date is a 32 char string, and
+	dpd.h says byte 128 has a feature
+	    agrees on the first four, but says the date is a 32 char string, and
             is followed by Arch[16], and Extra[256],  
 
             Drobo has a version string after arch, guessed at 16 chars.
             I shortened Extra for that.
-        byte 0x80 is supposed to be feature flags, found it a 0x73...
+	    byte 0x80 is supposed to be feature flags, found it a 0x73...
      """
      if DEBUG & DBG_Simulation:
         self.features=['NO_AUTO_REBOOT', 'NO_FAT32_FORMAT', \
                'USED_CAPACITY_FROM_HOST', 'DISKPACKSTATUS', \
                'ENCRYPT_NOHEADER', 'CMD_STATUS_QUERIABLE', \
-           'VARIABLE_LUN_SIZE_1_16', 'PARTITION_LUN_GPT_MBR', \
+	       'VARIABLE_LUN_SIZE_1_16', 'PARTITION_LUN_GPT_MBR', \
                'FAT32_FORMAT_VOLNAME', 'SUPPORTS_OPTIONS2', \
                'SUPPORTS_DROBOSHARE', 'SUPPORTS_NEW_LUNINFO2']
         self.fw=(1, 201, 12942, 12, 6, 'May 13 2008,15:29:32', \
@@ -1312,9 +1312,9 @@ class Drobo:
                - this drobo does not support Options ( fw < 1.11 )
            ( YellowThresh, RedThresh, AutoDelSnapshot, LowYel, LowRed )
                - drobo supports first version of options ( fw >= 1.11)
-       ( above + FeatureOnOffStates, SpinDownDelay, IPAddress, Subnetmask ) 
+  	   ( above + FeatureOnOffStates, SpinDownDelay, IPAddress, Subnetmask ) 
                - DroboPro only ? my v1's don't support it.
-    
+	
         STATUS: untested, seems to agree with dmp.h for Options
             Options2 (only on Drobo Pro) completely un-tested.
 
@@ -1412,7 +1412,7 @@ class Drobo:
 
 def DiscoverLUNs(debugflags=0,vendorstring="Drobo"):
     """ find all Drobo LUNs accessible to this user on this system. 
-    returns a list of list of character device files 
+	returns a list of list of character device files 
               samples: [ [ "/dev/sdf", "/dev/sdg" ], [ "/dev/sdh" ] ] 
         vendorstring adds a string to be compared to for SCSI ID LUN call.
         This value changes as new products are introduced.
@@ -1433,6 +1433,6 @@ def DiscoverLUNs(debugflags=0,vendorstring="Drobo"):
               d = Drobo( potential, DEBUG )
               devices.append(potential)
        except:
-          pass
+ 	      pass
               
     return devices
